@@ -3,7 +3,7 @@ import java.net.*;
 
 
 
-public class assignment{
+public class test1{
 	public static void main(String[] args){
 		try{
 			Socket s=new Socket("localhost",50000);
@@ -12,10 +12,10 @@ public class assignment{
 			BufferedReader init = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			String str = "";
 			
-			Integer nRec=null;
+			Integer nRec=0;
 			String[] sysInfo=null;
-			String sysType=null;
-			Integer sysID=null;
+			//String[] sysType=null;
+			//Integer sysID=null;
 			Integer currentID = 0;
 			Integer read =0;
 			String[] info=null;
@@ -27,201 +27,149 @@ public class assignment{
 			Integer serverid1 = 0;
 			
 			dout.write(("HELO\n").getBytes());
+			dout.flush();
 			str = in.readLine();
+			
 		
 			dout.write(("AUTH natalie1\n").getBytes());
+			dout.flush();
 			str = in.readLine();
 		
 			dout.write(("REDY\n").getBytes());
+			dout.flush();
 			str = in.readLine();
 			
 			//int read = 0;
 		
+		
+			String[] serverType = null;
+			Integer[] serverID = null; 
+			
 			while(!str.contains("NONE")){
-			if(str.contains("JOBN")|| str.contains("JOBP")){
+			if(str.contains("ERR")){
+			break;
+			}
+			else if(str.contains("JOBN")|| str.contains("JOBP")){
+			
 			String[] jobInfo=str.split("\\s+");
 			Integer jobID = Integer.parseInt(jobInfo[2]);
-			Integer jobCores=Integer.parseInt(jobInfo[4]);
-			Integer jobMemory=Integer.parseInt(jobInfo[5]);
-			Integer jobDisk=Integer.parseInt(jobInfo[6]);
-			System.out.println(jobID);
-			System.out.println(jobCores);
-			System.out.println(jobMemory);
-			System.out.println(jobDisk);
 			
 			
+			if(read==0){
 			dout.write(("GETS All\n").getBytes());
+			
+			dout.flush();
 			System.out.println("GETS All");
 			str=in.readLine();
 			System.out.println("RCVD"+str);
+			info = str.split("\\s+");
+			nRec=Integer.parseInt(info[1]);
+			System.out.println(nRec);
 			dout.write(("OK\n").getBytes()); //then prints out the servers 
 			System.out.println("SENT OK");
 			dout.flush();
 			
 			str=in.readLine();
-			String[] serverType = null;
-			String[] serverID = null; 
-			
-			if(read==0){
-			info = str.split("\\s+");
-			nRec=Integer.parseInt(info[1]);
+			String[] serverInfo = str.split("\\s+");			
 			
 			serverType = new String[nRec];
-			serverID = new String[nRec];
-			dout.write(("OK\n").getBytes());
-			str=in.readLine();
-			String[] serverInfo = str.split("\\s+");
-			int index =0;
-			int i=0;
+		//	System.out.println(serverType.length);
+			serverID = new Integer[nRec];
 			servertype=serverInfo[0];
+		//	System.out.println("line 72");
 			servercore=Integer.parseInt(serverInfo[4]);
+		//	System.out.println("line 74");
 			serverid = Integer.parseInt(serverInfo[1]);
+		//	System.out.println("line 76");
 			serverType[0] = servertype;
-			serverID[0] = String.valueOf(serverid);
+		//	System.out.println("line 78");
+			serverID[0] = serverid;
+		//	System.out.println("line 80");
 			
-			for(i=1; i<7; i++){
-			str=in.readLine();
-			String[] serverlargest = str.split("\\s+");
-				
-			servertype1=serverlargest[0];
-			servercore1=Integer.parseInt(serverlargest[4]);
-			serverid1 = Integer.parseInt(serverlargest[1]);
-			
-			serverType[i] = servertype;
-			serverID[i] = String.valueOf(serverid);
-			
-			if(servercore<servercore1){
-			servertype=serverlargest[0];
-			servercore=Integer.parseInt(serverlargest[4]);
-			serverid = Integer.parseInt(serverlargest[1]);
-			index = i;
-			}
-			}
-			
-			for(i = index; i<serverType.length; i++){
-			if(serverType[i] == servertype){
-			 serverid = Integer.parseInt(serverID[i]);
-			}
-			
-			
-			}
-			read = 1;
-			}
-			//readlin
-			//string[] serverType = null;
-			//String[] serverID = null;
-			
-			//if (read = 0){
-			//string split
-			//nrec 
-			//serverType = new String[nrec];
-			//serverID = new String[nrec];
-			// send ok
-			//read str
-			//string split
-			//int index = 0;
-			//servertype=string[0];
-			//servercore=string[4];
-			//serverid = string[1];
-			//serverType[0] = servertype;
-			//ServerID[0] = serverid;
-			//for loop (i=1; i<7)
-			//read str
-			//string slit
-			//servertype=string[0];
-			//servercore=string[4];
-			//serverid = string[1];
-			//serverType[i] = servertype;
-			//ServerID[i] = serverid;
-			//if(core1 > core)
-			//servertype=string[0];
-			//servercore=string[4];
-			//serverid = string[1];
-			//index = i;
-			//close if
-			//close for loop
-			//
-			// for loop(i = index; i<serverType.length; i++){
-			//if(serverType[i] == servertype){
-			// serveid = serverID[i]
-			//end if
-			
-			//read = 1;
-			
-			
-			
-		//	str=in.readLine();
-		//	String[] info = str.split("\\s+"); //splits DATA (no. server) (?) 
-		//	nRec=Integer.parseInt(info[1]);
-		//	sysInfo=str.split("\\s+");
-		//	//sysType="juju";
-		//	sysType=sysInfo[0]; 
-		//	sysID=0;
-		//	
-		//	String[] serverType= 
-		
 		//	dout.write(("OK\n").getBytes());
 		//	str=in.readLine();
-		//	
-		//	dout.write(("SCHD "+jobID+" "+sysType+" "+sysID+"\n").getBytes());
-		//	dout.flush();
-		//	str=in.readLine();
 			
-		//	String[] info = str.split("\\s+"); //splits DATA (no. server) (?) 
-		//	nRec=Integer.parseInt(info[1]);
 			
-			//System.out.println("RCVD");
-		//	for(int i =0; i<nRec; i++){ //print servers available
-		//	str=in.readLine();
+			int index =0;
+			
+			
+			
+			
+			for(int i=1; i<nRec; i++){
+			str=in.readLine();
 		//	System.out.println(str);
-		//	}
-		//	sysInfo=str.split("\\s+"); //
-		//	sysType="juju"; //medium/juju Within in the DATA (no.server) (?)
-		//	sysType=sysInfo[0];
-		//	if(jobCores>4){
-		//	sysType="super-silk";
-		///	sysID=0;
-		//	}else{
-		//	sysType="joon";
-		//	sysID=0; 
-		//	}
+			String[] serverlargest = str.split("\\s+");
+		//	System.out.println(serverlargest.length);	
+			servertype1=serverlargest[0];
+		//	System.out.println("Line 91");
+			servercore1=Integer.parseInt(serverlargest[4]);
+			//System.out.println("Line 93");
+			serverid1 = Integer.parseInt(serverlargest[1]);
+			//System.out.println("Line 95");
 			
+			serverType[i] = servertype1;
+		//	System.out.println(serverType[i]);
+			//System.out.println("Line 98");
 			
+			serverID[i] = serverid1;
+		//	System.out.println(serverID[i]);
 			
-		//	if(jobCores==2 || jobCores<2){
-		//	sysType="juju";
-		//	sysID=1;
-		//	}else{
-		//	sysType="juju";
-		//	sysID=0; 
-		//	}
+			if(servercore<servercore1){
+
+			servertype=servertype1;
+			System.out.println(servertype);
+			servercore=servercore1;
+		//	serverid = serverid1;
+			index = i;
+		//	System.out.println(index);
+			}
+			}
+			//System.out.println(serverType.length);
+		//	System.out.println(servertype);
+			for(int i= index; i<serverType.length; i++){
+			System.out.println(i);
+			System.out.println(serverID[i]);
+			System.out.println(serverType[i]);
+			if(servertype.equals(serverType[i])){
+			 serverid = serverID[i];
+			 
+	//		 System.out.println(index);
+		//	 System.out.println(serverid);
+			}
 			
-			System.out.println(sysType);
-		//	sysID=0; //ID of server
+			}
 			
-			
-									
 			dout.write(("OK\n").getBytes());
 			dout.flush();
 			str=in.readLine();
-			System.out.println("RCVD"+str);
-			
-			dout.write(("SCHD "+jobID+" "+sysType+" "+sysID+"\n").getBytes());
+			read = 1;
+			}
+								
+		//	dout.write(("OK\n").getBytes());
+		//	dout.flush();
+		//	str=in.readLine();
+		//	System.out.println("RCVD"+str);
+			if(currentID>serverid){
+			currentID=0;
+			}
+			dout.write(("SCHD "+jobID+" "+servertype+" "+currentID+"\n").getBytes());
 			dout.flush();
+			currentID++;
 			str=in.readLine();
 			System.out.println("RCVD"+str);
 			
-			//if (count < i) 
-			//count++;
 			}
 			
 			dout.write(("REDY\n").getBytes());
-		//	dout.flush();
+			dout.flush();
 			str=in.readLine();
 			}
-			//count=0;
+			dout.write(("QUIT\n").getBytes());
+			dout.flush();
+			str=in.readLine();
 			dout.close();
 			s.close();
-		}catch(Exception e){System.out.println(e);}
+		}catch(Exception e){System.out.println(e);
+		}
 	}
 }
